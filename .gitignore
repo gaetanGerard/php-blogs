@@ -134,3 +134,7 @@ conf/
 
 # vendor
 vendor/
+
+# db
+dbdata/
+.DS_Store
