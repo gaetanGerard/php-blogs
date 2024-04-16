@@ -62,13 +62,16 @@ function update_article_object() {
 
     // Boucler à travers les articles et ajouter un tableau images vide
     foreach ($articles as $article) {
+        $created_at = $article['created_at'] ? date('d/m/Y', strtotime($article['created_at'])) : null;
+        $updated_at = $article['updated_at'] ? date('d/m/Y', strtotime($article['updated_at'])) : null;
+
         $article_with_images = [
             'id' => $article['id'],
             'title' => $article['title'],
             'author' => '',
             'content' => $article['content'],
-            'created_at' => $article['created_at'],
-            'updated_at' => $article['updated_at'],
+            'created_at' => $created_at,
+            'updated_at' => $updated_at,
             'images' => []
         ];
 
