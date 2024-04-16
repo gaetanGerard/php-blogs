@@ -1,29 +1,40 @@
 <?php
 
-// Obtenir le chemin du répertoire parent
-$parent_dir = dirname(__DIR__);
+/*
+*
+* 1. Inclure le fichier de configuration et se connecter à la base de données
+* Tester si la connexion à la DB en local fonctionne ou en utilisant le nom de domaine car ma
+* DB est sur un serveur privé
+*
+*/
 
-// Inclure le fichier de configuration
-$config_file = $parent_dir . '/conf/config.ini';
+function db_connect() {
+    // Obtenir le chemin du répertoire parent
+    $parent_dir = dirname(__DIR__);
 
-// Charger les informations du fichier de configuration
-$config = parse_ini_file($config_file)
+    // Inclure le fichier de configuration
+    $config_file = $parent_dir . '/conf/config.ini';
 
-// Récupérer les informations de connexion
-$db_local_addr = $config['db_local_addr'];
-$db_domain_addr = $config['db_domain_addr'];
-$db_user = $config['db_user'];
-$db_password = $config['db_password'];
-$db_name = $config['db_name'];
+    // Charger les informations du fichier de configuration
+    $config = parse_ini_file($config_file);
 
-// Créer une connexion à la base de données en utilisant l'adresse IP locale
-$connection = new mysqli($db_local_addr, $db_user, $db_password, $db_name);
+    // Récupérer les informations de connexion
+    $db_local_addr = $config['db_local_addr'];
+    $db_domain_addr = $config['db_domain_addr'];
+    $db_user = $config['db_user'];
+    $db_password = $config['db_password'];
+    $db_name = $config['db_name'];
 
-// Vérifier si la connexion local à réussi
-if (!$connection) {
-    // Si la connexion locale a échoué, essayer de se connecter à la base de données à l'aide du nom de domaine
-    $connection = new mysqli($db_domain_addr, $db_user, $db_password, $db_name);
+    // Créer une connexion à la base de données en utilisant l'adresse IP locale
+    $connection = new mysqli($db_local_addr, $db_user, $db_password, $db_name);
+
+    // Vérifier si la connexion local à réussi
+    if (!$connection) {
+        // Si la connexion locale a échoué, essayer de se connecter à la base de données à l'aide du nom de domaine
+        $connection = new mysqli($db_domain_addr, $db_user, $db_password, $db_name);
+    }
+
+    return $connection;
 }
 
-// Stockage du résultat dans une variable
-$connection_result = ($connection !== false) ? "Connexion réussie" : "Impossible de se connecter à la base de données";
+
